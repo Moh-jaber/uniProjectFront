@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 
 const pageVariants = {
   initial: {
@@ -23,6 +24,17 @@ const pageTransition = {
 };
 
 const PageTransition = ({ children }) => {
+  const location = useLocation();
+
+  // Scroll to top after animation completes (0.5s duration + small buffer)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }, 550); // Wait for animation to complete (500ms) + small buffer
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
+
   return (
     <motion.div
       initial="initial"
